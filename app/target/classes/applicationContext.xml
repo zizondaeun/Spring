@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+            
+	<beans:bean id="tv" class="com.yedam.spring.TV" />
+	
+	<!-- DI : xml 방식 -->
+	<beans:bean id="cf" class="com.yedam.spring.xml.Chef"/>
+	
+	<beans:bean class="com.yedam.spring.xml.Restaurant">
+		<!-- 생성자 인젝션 -->
+		<!-- <beans:constructor-arg ref="cf"/> -->
+		<!-- 세터 인젝션 -->
+		<!-- <beans:property name="chef" ref="cf"/> -->
+	</beans:bean>
+	
+	<!-- DI : annotation 방식 -->
+	<context:component-scan base-package="com.yedam.spring"/>
+</beans>
