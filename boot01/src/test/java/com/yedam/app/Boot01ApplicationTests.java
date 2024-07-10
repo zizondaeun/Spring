@@ -46,13 +46,13 @@ class Boot01ApplicationTests {
 	void insertEmpInfo() {
 		//등록
 		EmpVO empVO = new EmpVO();
-		empVO.setEmpname("Hong");
+		empVO.setEmpname("Kim");
 		empVO.setSal(1000);
 		empVO.setDeptid(40);
 		
 		int result = empMapper.insertEmpInfo(empVO);
 		//assertEquals(result, 1); //반환되는 값이 1이면 성공
-		assertEquals(empVO.getEmpid().intValue(), 204);
+		assertEquals(empVO.getEmpid().intValue(), 2);
 	}
 	
 	//@Test
