@@ -11,13 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.yedam.app.departments.mapper.DepartmentsMapper;
+import com.yedam.app.departments.service.DepartmentsVO;
 import com.yedam.app.emp.mapper.EmpMapper;
 import com.yedam.app.emp.service.EmpVO;
 
 @SpringBootTest
 class Boot01ApplicationTests {
 	
-	@Autowired
+	//@Autowired
 	EmpMapper empMapper;
 	
 	//@Test
@@ -42,7 +44,7 @@ class Boot01ApplicationTests {
 		assertEquals(findVO.getEmpname(), "Alexander");
 	}
 	
-	@Test
+	//@Test
 	void insertEmpInfo() {
 		//등록
 		EmpVO empVO = new EmpVO();
@@ -76,6 +78,62 @@ class Boot01ApplicationTests {
 	void deleteEmpInfo() {
 		//삭제
 		int result = empMapper.deleteEmpInfo(2);
+		assertEquals(1, result);
+	}
+	
+	@Autowired
+	DepartmentsMapper deptMapper;
+	
+	@Test
+	void contextLoads1() {
+		assertNotNull(deptMapper);
+	}
+	
+	//@Test
+	void selectDeptAll() {
+		//전체조회
+		List<DepartmentsVO> list = deptMapper.selectDeptAll();
+		assertTrue(!list.isEmpty());
+	}
+	
+	//@Test
+	void selectDeptInfo() {
+		//단건조회
+		DepartmentsVO deptVO = new DepartmentsVO();
+		deptVO.setDepartmentId(270);
+		
+		DepartmentsVO findVO = deptMapper.selectDeptInfo(deptVO);
+		assertEquals(findVO.getDepartmentName(), "Payroll");
+	}
+	
+	//@Test
+	void insertDeptInfo() {
+		//등록
+		DepartmentsVO deptVO = new DepartmentsVO();
+		deptVO.setDepartmentName("SalesMan");
+		deptVO.setManagerId(205);
+		deptVO.setLocationId(1800);
+		
+		int result = deptMapper.insertDeptInfo(deptVO);
+		assertEquals(result, 1);
+	}
+	
+	//@Test
+	void updateDeptInfo() {
+		//수정(조회 -> 업데이트)
+		DepartmentsVO deptVO = new DepartmentsVO();
+		deptVO.setDepartmentId(271);
+		
+		DepartmentsVO findVO = deptMapper.selectDeptInfo(deptVO);
+		findVO.setDepartmentName("SalesssMan");
+		
+		int result = deptMapper.updateDeptInfo(findVO.getDepartmentId(), findVO);
+		assertEquals(1, result);
+	}
+	
+	@Test
+	void deleteDeptInfo() {
+		int result = deptMapper.deleteDeptInfo(271);
 		assertEquals(1, result);
 	}
 }
