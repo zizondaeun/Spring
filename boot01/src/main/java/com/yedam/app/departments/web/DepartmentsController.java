@@ -50,4 +50,13 @@ public class DepartmentsController {
 		}
 		return url;
 	}
+	
+	//수정 - 페이지 /컨트롤러 보통 두개
+	//@PostMapping("deptUpdate")
+	
+	//수정 - 처리(연산, AJAX => QueryString 기반)
+	
+	//수정 - 처리(연산, AJAX => JSON 기반)
+	
+	//삭제 - 처리 / 컨트롤러 하나(페이지가 따로 필요 x)
 }

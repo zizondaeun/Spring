@@ -1,12 +1,16 @@
 package com.yedam.app.emp.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.emp.service.EmpService;
 import com.yedam.app.emp.service.EmpVO;
@@ -23,19 +27,23 @@ public class EmpController {
 	//POST : 데이터 조작(등록, 수정, 삭제)
 	
 	//전체조회 /컨트롤러가 하나
-	@GetMapping("empList")
-	public String empList(Model model) { //Model = Request + Response
+	@GetMapping("empList") //얘는 /있어도 상관없는데
+	public String empList(Model model) { //Model = Request + Response /파라미터 필요 x, model(resp)을 담음
 		//1)기능 수행
 		List<EmpVO> list = empService.empList();
 		//2)클라이언트에 전달할 데이터 담기(기능을 model에 담아)
 		model.addAttribute("empList", list);
 		//3)데이터를 출력할 페이지 결정
-		return "emp/list";
+		return "emp/list"; //얘는 앞에 /없어야함
+		//타임리프
+		//classpath:/templates/	emp/list	.html
+		//prefix 				return		suffix
+		// => classpath:/templates/emp/list.html
 	}
 	
 	//단건조회
 	@GetMapping("empInfo") //커맨드 객체 => application/x-www-form-urlencoded
-	public String empInfo(EmpVO empVO, Model model) { //(커맨드객체 , )
+	public String empInfo(EmpVO empVO, Model model) { //(커맨드객체 , ) /(파라미터 처리, model)
 		EmpVO findVO = empService.empInfo(empVO);
 		model.addAttribute("empInfo", findVO);
 		return "emp/info";
@@ -62,13 +70,36 @@ public class EmpController {
 		return url;
 	}
 	
-	//수정 - 페이지 /컨트롤러 보통 두개
+	//수정 - 페이지 => 단건조회 /컨트롤러 보통 두개
+	@GetMapping("empUpdate")
+	public String empUpdateForm(@RequestParam Integer empid, Model model) {
+		EmpVO empVO = new EmpVO();
+		empVO.setEmpid(empid);
+		
+		EmpVO findVO = empService.empInfo(empVO);
+		model.addAttribute("empInfo", findVO);
+		
+		return "emp/update";
+	}
+	
+	//수정 - 처리(연산, AJAX => QueryString 기반) /페이지 요청 x(데이터를 가져오는것) , 페이지를 일부분만 수정하는것(통신량을 줄이는 방식):ajax
+	@PostMapping("empUpdate")
+	@ResponseBody // => AJAX로 보낼때 반드시 써야할 @
+	public Map<String, Object> empUpdateAJAXQueryString(EmpVO empVO){
+		return empService.empUpdate(empVO);
+	}
+	
+	//수정 - 처리(연산, AJAX => JSON 기반 : @RequestBody)
 	//@PostMapping("empUpdate")
+	@ResponseBody // => AJAX로 보낼때 반드시 써야할 @(=서버가 돌려보내주는게 page냐 "data"냐)
+	public Map<String, Object> empUpdateAJAXJSON(@RequestBody EmpVO empVO){ //@RequestBody = json포맷을 쓰겠다는 선언
+		return empService.empUpdate(empVO);
+	}
 	
-	//수정 - 처리(연산, AJAX => QueryString 기반)
-	
-	//수정 - 처리(연산, AJAX => JSON 기반)
-	
-	//삭제 - 처리 / 컨트롤러 하나(페이지가 따로 필요 x)
-	
+	//삭제 - 처리 / 컨트롤러 하나(페이지가 따로 필요 x) /삭제는 ajax 보통 안씀. 데이터가 지워졌는데 다시 보여질 필요가 없기때문에
+	@GetMapping("empDelete")
+	public String empDelete(EmpVO empVO) {
+		empService.empDelete(empVO);
+		return "redirect:empList";
+	}
 }

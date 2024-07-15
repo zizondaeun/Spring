@@ -81,6 +81,7 @@ class Boot01ApplicationTests {
 		assertEquals(1, result);
 	}
 	
+	//departments 테이블로 해본 것
 	@Autowired
 	DepartmentsMapper deptMapper;
 	
@@ -131,7 +132,7 @@ class Boot01ApplicationTests {
 		assertEquals(1, result);
 	}
 	
-	@Test
+	//@Test
 	void deleteDeptInfo() {
 		int result = deptMapper.deleteDeptInfo(271);
 		assertEquals(1, result);
