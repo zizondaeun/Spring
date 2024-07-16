@@ -51,7 +51,9 @@ public class EmpServiceImpl implements EmpService{
 		 * {
 		 * 		"result" : true,
 		 * 		"target" : {
-		 * 					
+		 * 						empid : 100,
+		 * 						empname : 'King',
+		 * 						...
 		 * 					}
 		 * }
 		 * */

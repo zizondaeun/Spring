@@ -12,7 +12,7 @@ public class EmpVO {
 	private String empname;
 	private int mgr;
 	private double sal;
-	private int deptid;
+	private Integer deptid;
 	@DateTimeFormat(pattern = "yyyy-MM-dd") //파라미터 자동변환 시
 	private Date hiredate; //2024/07/01
 }

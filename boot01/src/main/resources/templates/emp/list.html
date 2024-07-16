@@ -1,9 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="contextPath" th:value="${#httpServletRequest.getContextPath()}">
+<!--/* JSP ${pageContext.request.contextPath} */-->
+<title></title>
+
 </head>
 <body>
+	<h3>전체 사원 조회</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>사원번호</th>
+				<th>이름</th>
+				<th>입사일자</th>
+				<th>부서번호</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:each="emp : ${empList}">
+				<!--/* <tr th:onclick="| location.href='@{/empInfo(empid=${emp.empid})}' |"> */-->
+				<tr>
+					<td th:text="${emp.empid}"></td>
+					<td th:text="${emp.empname}"></td>
+					<td>[[ ${#dates.format(emp.hiredate, 'yyyy년MM월dd일 HH:mm:ss')} ]]</td>
+					<!--/* <td th:text="${#dates.format(emp.hiredate, 'yyyy-MM-dd HH:mm:ss')}"></td> */-->
+					<!--/* <td>[[ ${emp.hiredate} ]]</td> */-->
+					<td>[[ ${emp.deptid} ]]</td>
+					<!--/* <td><button>삭제</button></td> */-->
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+	<script>
+		const context = $('meta[name="contextPath"]').attr('value'); //=contextPath
+		$('tbody > tr').on('click', function(event){ //tbody 안에 있는 tr(그러니까 "td")에 이벤트 걸거야
+			//if(event.target.tagName == 'BUTTON') return; /tr안에 td로 삭제 버튼이 있을 경우에 
+			
+			let eId = $(event.currentTarget).children().first().text(); //currentTarget:just <tr>/.children():tr정보 다 가져와/.first():tr의 첫번째 td/.text():value가 없으니까 text로 값을 불러와
+			let url = context + '/empInfo?empid=' + eId;
+			console.log('url : ', url);
+			location.href = url;
+		});
+	</script>
 </body>
 </html>
