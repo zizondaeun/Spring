@@ -43,7 +43,7 @@ public class EmpController {
 	
 	//단건조회
 	@GetMapping("empInfo") //커맨드 객체 => application/x-www-form-urlencoded
-	public String empInfo(EmpVO empVO, Model model) { //(커맨드객체 , ) /(파라미터 처리, model)
+	public String empInfo(EmpVO empVO, Model model) { //(커맨드객체, ) /(파라미터 처리, model)
 		EmpVO findVO = empService.empInfo(empVO);
 		model.addAttribute("empInfo", findVO); //정보는 여기에 담겨있음 위에는 그냥 문패
 		return "emp/info";

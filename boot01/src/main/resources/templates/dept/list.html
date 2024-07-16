@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<meta name="contextPath" th:value="${#httpServletRequest.getContextPath()}">
+<title>Insert title here</title>
+</head>
+<body>
+	<h3>부서 조회</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>부서번호</th>
+				<th>부서이름</th>
+				<th>상사번호</th>
+				<th>지역번호</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:each="dept : ${deptList}">
+				<!--/* <tr th:onclick="| location.href='@{/empInfo(empid=${emp.empid})}' |"> */-->
+				<tr>
+					<td th:text="${dept.departmentId}"></td>
+					<td th:text="${dept.departmentName}"></td>
+					<td th:text="${dept.managerId}"></td>
+					<td th:text="${dept.locationId}"></td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+	<script>
+		const context = $('meta[name="contextPath"]').attr('value');
+		//console.log(context); //=/yedam
+		$('tbody > tr').on('click', function(event){
+			let deptId = $(event.currentTarget).children().first().text();
+			console.log(deptId); //부서번호 가져옴
+			let url = context + '/deptInfo?departmentId=' + deptId;
+			console.log(url);
+			location.href = url;
+		});
+	</script>
+</body>
+</html>

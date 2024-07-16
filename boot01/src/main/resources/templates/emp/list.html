@@ -41,7 +41,7 @@
 		$('tbody > tr').on('click', function(event){ //tbody 안에 있는 tr(그러니까 "td")에 이벤트 걸거야
 			//if(event.target.tagName == 'BUTTON') return; /tr안에 td로 삭제 버튼이 있을 경우에 
 			
-			let eId = $(event.currentTarget).children().first().text(); //currentTarget:just <tr>/.children():tr정보 다 가져와/.first():tr의 첫번째 td/.text():value가 없으니까 text로 값을 불러와
+			let eId = $(event.currentTarget).children().first().text(); //currentTarget:just <tr>/.children():tr정보 다 가져와(td객체 다 불러옴)/.first():tr의 첫번째 td/.text():value가 없으니까 text로 값을 불러와
 			let url = context + '/empInfo?empid=' + eId;
 			console.log('url : ', url);
 			location.href = url;
