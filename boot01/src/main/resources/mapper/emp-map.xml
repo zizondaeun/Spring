@@ -71,12 +71,25 @@
 	</insert>
 	
 	<!-- 수정 - 매개값이 두개면 파라미터를 생략하고 진행해도 됨 -->
-	<update id="updateEmpInfo">
+<!-- 	<update id="updateEmpInfo">
 		UPDATE emp
 		SET empname = #{emp.empname}
 				, sal = #{emp.sal}
 				, mgr = #{emp.mgr}
 				, deptid = #{emp.deptid}
+		WHERE empid = #{id}
+	</update> -->
+	
+	<update id="updateEmpInfo">
+		UPDATE emp
+		<set>
+			sal = #{emp.sal}
+			, mgr = #{emp.mgr}
+			, deptid = #{emp.deptid}
+			<if test="emp.empname != null and !emp.empname.equals('')">
+			, empname = #{emp.empname}
+			</if>
+		</set>
 		WHERE empid = #{id}
 	</update>
 	
