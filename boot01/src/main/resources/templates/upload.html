@@ -12,23 +12,23 @@
 	</div>
 	<script>
 		$('.uploadBtn').on('click', function(event){
-			let formData = new FormData();
-			// 유사) jQuery.serializeArray();
-			// 1) <from/>태그 내부의 입력태그 정보를 한번에 받음
+			let formData = new FormData(); //form태그가 아니라 ajax로 보내야함
+			// 유사) jQuery.serializeArray(); = FormData():console에 안나옴  
+			// 1) <form/>태그 내부의 입력태그 정보를 한번에 받음
 			// 2) AJAX를 이용하여 'Content-type:multipart/form-data'를 보내는 경우
 			
-			let input = $(event.currentTarget).prev()[0];
+			let input = $(event.currentTarget).prev()[0]; //prev = button(내 옆에)/타입이 file이면 value없어
 			let fileList = input.files;
 			
 			for(let file of fileList){
-				formData.append(input.name, file);
+				formData.append(input.name, file); //("uploadFiles", file) //file은 드물게 배열로 전달이돼
 			}
 			
 			console.log(formData.get("uploadFiles"));
 			
-			fetch('uploadsAjax', {
+			fetch('uploadsAjax', { //패치는 상관없어
 				method : 'post',
-				body : formData
+				body : formData //header 필요x
 			})
 			.then(res => res.json())
 			.then(result => {
@@ -36,12 +36,12 @@
 			})
 			.catch(err => console.log(err));
 			
-			$.ajax('uploadsAjax',{
+			$.ajax('uploadsAjax',{ //제이쿼리 아작스때는 이렇게 보내야함
 				type : 'post',				
 				data : formData,     // data 속성의 값(객체 타입)을
 				processData : false, // QueryString으로 변환하는 설정
 				contentType : false  // 기본 contentType을 사용하지 않겠다고 설정
-			})
+			}) //아작스로 보낼때 contenttype이랑 processdata의 기본 값을 죽이겠다, data를 formdata(=form태그의 multipart) 속성을 보내겠다
 			.done(result => {
 				for (let image of result){
 					let imgTag = `<img src='images/${image}' style="width : 50%;">`;
