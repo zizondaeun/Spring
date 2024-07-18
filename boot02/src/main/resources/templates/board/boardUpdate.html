@@ -1,9 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
+	<h3>게시글 수정</h3>
+	<form name="updateForm" th:object="${boardInfo}" enctype="multipart/form-data">
+		<div>
+			<label>번호</label>
+			<input type="number" th:field="*{boardNo}" readonly>
+		</div>
+		<div>
+			<label>제목</label>
+			<input type="text" th:field="*{boardTitle}">
+		</div>
+		<div>
+			<label>내용</label>
+			<textarea th:field="*{boardContent}" cols="30" rows="5"></textarea>
+		</div>
+		<div>
+			<label>작성자</label>
+			<input type="text" th:field="*{boardWriter}" readonly>
+		</div>
+		<div>
+			<label>작성일</label>
+			<input type="date" th:field="*{regdate}" readonly>
+		</div>
+		<div>
+			<label>수정일</label>
+			<input type="date" th:value="*{updatedate}">
+		</div>
+		<div>
+			<label>첨부이미지</label>
+			<img th:src="@{'/images/' + ${boardInfo.image}}" alt="이미지" style="width:100px; height:100px">
+			<input type="file" name="images" multiple>
+		</div>
+		<div>
+			<button type="button" id="updateBtn">저장</button>
+			<button type="button" th:onclick="|location.href ='@{/boardList}'|">목록</button>
+		</div>
+	</form>
+	<script>
+		$('#updateBtn').on('click', updateAjax);
+		function updateAjax(event){
+			//1)유효성체크
+			if(validationCheck() == false) return;
+			//2)서버에 보낼 데이터 정리
+			let dataObj = getBoardObj();
+			//3)AJAX
+			$.ajax('boardUpdate', {
+				type : 'post',
+				contentType : 'application/json',
+				data : JSON.stringify(dataObj)
+			})
+			.done(result => {
+				console.log(result);
+			})
+			.fail(err => console.log(err));
+		}
+		
+		function validationCheck(){
+			let boardTitle = $('[name="boardTitle"]');
+			if(boardTitle.val() == ''){
+				alert('제목은 필수 값입니다.');
+				boardTitle.focus();
+				return false;
+			}
+			let boardContent = $('[name="boardContent"]');
+			if(boardContent.val() == ''){
+				alert('내용은 필수 값입니다.');
+				boardContent.focus();
+				return false;
+			}
+			let updatedate = $('[name="updatedate"]');
+			if(updatedate.val() == ''){
+				alert('수정일 선택은 필수 값입니다.');
+				updatedate.focus();
+				return false;
+			}
+			return true;
+		}
+		
+		function getBoardObj(){
+			let formAry = $('form[name="updateForm"]').serializeArray();
+			let formObj = {};
+			$.each(formAry, function(idx, input){
+				formObj[input.name] = input.value;
+			});
+			return formObj;
+		}
+	</script>
 </body>
 </html>
