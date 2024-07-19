@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>
+	<h3>게시글 상세 조회</h3>
+	<div>
+		<div>
+			<label>번호</label>
+			<input type="number" th:value="${board.boardNo}" readonly>
+		</div>
+		<div>
+			<label>제목</label>
+			<input type="text" th:value="${board.boardTitle}" readonly>
+		</div>
+		<div>
+			<label>내용</label>
+			<textarea th:text="${board.boardContent}" cols="30" rows="5" readonly></textarea>
+		</div>
+		<div>
+			<label>작성자</label>
+			<input type="text" th:value="${board.boardWriter}" readonly>
+		</div>
+		<div>
+			<label>작성일</label>
+			<input type="date" th:value="${#dates.format(board.regdate, 'yyyy-MM-dd')}" readonly>
+		</div>
+		<div>
+			<label>수정일</label>
+			<input type="date" th:value="${#dates.format(board.updatedate, 'yyyy-MM-dd')}" readonly>
+		</div>
+		<div>
+			<label>첨부이미지</label>
+			<!-- 이거는 동적인 방식(로컬에 저장) -->
+			<img th:src="@{'/images/' + ${board.image}}" alt="이미지" style="width:100px; height:100px">
+		</div>
+		<div>
+			<button type="button" th:onclick="|location.href='@{boardUpdate(boardNo=${board.boardNo})}'|">수정</button>
+			<button type="button" th:onclick="|location.href='@{/boardList}'|">목록</button>
+			<button type="button" th:onclick="|location.href='@{boardDelete(boardNo=${board.boardNo})}'|">삭제</button>
+		</div>
+	</div>
+</body>
+</html>

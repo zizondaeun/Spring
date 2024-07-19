@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- common/configs/default_layout.html -->
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<!-- configs -->	<!-- 페이지 => viewResolver		 :: fragment 이름 => th:fragment참고 -->
+<th:block th:replace="common/configs/default_config :: defaultConfig"></th:block>
+</head>
+<body>
+<!-- fragments -->
+	<div class="container">
+		<header th:insert="common/fragments/default_header :: defaultHeader"></header>
+		<main layout:fragment="content"></main>
+	</div>
+</body>
+</html>

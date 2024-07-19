@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.book.mapper.BookMapper">
+	<!-- 전체조회 -->
+	<select id="selectBookAll" resultType="BookVO">
+		SELECT book_no
+				, book_name
+				, book_coverimg
+				, book_date
+				, book_price
+				, book_publisher
+				, book_info
+		FROM book_tbl_06
+		ORDER BY book_no
+	</select>
+
+	<!-- 단건조회 -->
+	<select id="selectBookInfo" resultType="BookVO" parameterType="BookVO">
+		SELECT book_no
+				, book_name
+				, book_coverimg
+				, book_date
+				, book_price
+				, book_publisher
+				, book_info
+		FROM book_tbl_06
+		WHERE book_no = #{bookNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insertBookInfo" parameterType="BookVO">
+		<selectKey keyProperty="bookNo"
+			resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(book_no), 0) + 1
+			FROM book_tbl_06
+		</selectKey>
+		INSERT INTO book_tbl_06(
+								    book_no,
+								    book_name,
+								    book_coverimg,
+								    book_date,
+								    book_price,
+								    book_publisher,
+								    book_info
+								)
+				VALUES 			(
+									#{bookNo}
+									, #{bookName}
+									, #{bookCoverImg}
+									, #{bookDate}
+									, #{bookPrice}
+									, #{bookPublisher}
+									, #{bookInfo}
+								)		
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateBookInfo" parameterType="BookVO">
+		UPDATE book_tbl_06
+		SET book_no = #{bookNo}
+			, book_name = #{bookName}
+			, book_coverimg = #{bookCoverImg}
+			, book_date = #{bookDate}
+			, book_price = #{bookPrice}
+			, book_publisher = #{bookPublisher}
+			, book_info = #{bookInfo}
+		WHERE book_no = #{bookNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteBookInfo" parameterType="int">
+		DELETE FROM book_tbl_06
+		WHERE book_no = #{bookNo}
+	</delete>
+	
+	<!-- 대여조회 -->
+	<select id="selectRentAll" resultType="BookVO">
+		SELECT t.book_no, t.book_name, r.rent_price, r.rent_status
+		FROM 	book_tbl_06 t, rent_tbl_06 r
+		WHERE 	t.book_no = r.book_no
+	</select>
+</mapper>

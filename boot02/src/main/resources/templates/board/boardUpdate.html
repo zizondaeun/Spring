@@ -1,96 +1,86 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="content">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	<h3>게시글 수정</h3>
-	<form name="updateForm" th:object="${boardInfo}" enctype="multipart/form-data">
-		<div>
-			<label>번호</label>
-			<input type="number" th:field="*{boardNo}" readonly>
-		</div>
-		<div>
-			<label>제목</label>
-			<input type="text" th:field="*{boardTitle}">
-		</div>
-		<div>
-			<label>내용</label>
-			<textarea th:field="*{boardContent}" cols="30" rows="5"></textarea>
-		</div>
-		<div>
-			<label>작성자</label>
-			<input type="text" th:field="*{boardWriter}" readonly>
-		</div>
-		<div>
-			<label>작성일</label>
-			<input type="date" th:field="*{regdate}" readonly>
-		</div>
-		<div>
-			<label>수정일</label>
-			<input type="date" th:value="*{updatedate}">
-		</div>
-		<div>
-			<label>첨부이미지</label>
-			<img th:src="@{'/images/' + ${boardInfo.image}}" alt="이미지" style="width:100px; height:100px">
-			<input type="file" name="images" multiple>
-		</div>
-		<div>
-			<button type="button" id="updateBtn">저장</button>
-			<button type="button" th:onclick="|location.href ='@{/boardList}'|">목록</button>
-		</div>
-	</form>
+	<div>
+		<h3>게시글 수정</h3>
+		<form name="updateForm" th:object="${boardInfo}">
+			<table class="table">
+				<tr>
+					<th>번호</th>
+					<td><input type="text"  th:field="*{boardNo}" readonly></td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td><input type="text"  th:field="*{boardTitle}"></td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td><input type="text" th:field="*{boardWriter}"></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td><textarea th:field="*{boardContent}" cols="30" rows="5"></textarea></td>
+				</tr>
+				<tr>
+					<th>첨부이미지</th>
+					<td><input type="text" th:field="*{image}"></td>
+				</tr>
+				<tr>
+					<th>작성일</th>
+					<td><input type="date" th:field="*{regdate}" readonly></td>
+				</tr>
+				<tr>
+					<th>수정일</th>
+					<td><input type="date" th:value="*{updatedate}" readonly></td>
+				</tr>
+			</table>
+			<button type="button" class="btn btn-warning" id="updateBtn">수정</button>
+			<button type="button" class="btn btn-secondary" th:onclick="|location.href ='@{/boardList}'|">목록</button>
+		</form>
+	</div>
 	<script>
-		$('#updateBtn').on('click', updateAjax);
-		function updateAjax(event){
-			//1)유효성체크
-			if(validationCheck() == false) return;
-			//2)서버에 보낼 데이터 정리
-			let dataObj = getBoardObj();
-			//3)AJAX
-			$.ajax('boardUpdate', {
-				type : 'post',
+		$('#updateBtn').on('click', boardUpdateAjax);
+		
+		function boardUpdateAjax(event){
+			//1) 보낼 데이터 확인
+			let info = getBoardInfo();
+			
+			//2) AJAX
+			$.ajax('boardUpdate',{
+				type:'post',
 				contentType : 'application/json',
-				data : JSON.stringify(dataObj)
+				data : JSON.stringify(info)
 			})
-			.done(result => {
-				console.log(result);
+			.done(data => {
+				if(data.result){
+					alert('정상적으로 수정되었습니다.');
+				}else{
+					alert('수정되지 않았습니다.\n데이터를 확인해주세요.');
+				}
 			})
-			.fail(err => console.log(err));
-		}
-		
-		function validationCheck(){
-			let boardTitle = $('[name="boardTitle"]');
-			if(boardTitle.val() == ''){
-				alert('제목은 필수 값입니다.');
-				boardTitle.focus();
-				return false;
-			}
-			let boardContent = $('[name="boardContent"]');
-			if(boardContent.val() == ''){
-				alert('내용은 필수 값입니다.');
-				boardContent.focus();
-				return false;
-			}
-			let updatedate = $('[name="updatedate"]');
-			if(updatedate.val() == ''){
-				alert('수정일 선택은 필수 값입니다.');
-				updatedate.focus();
-				return false;
-			}
-			return true;
-		}
-		
-		function getBoardObj(){
-			let formAry = $('form[name="updateForm"]').serializeArray();
-			let formObj = {};
-			$.each(formAry, function(idx, input){
-				formObj[input.name] = input.value;
+			.fail(err => console.log(err));			
+		};
+	
+		function getBoardInfo(){
+			let formData= $('form[name="updateForm"]').serializeArray();
+			console.log('1) serializeArray', formData);
+			
+			let objData = {};
+			$.each(formData, (idx, input) => {
+				console.log('2) input', idx, input); //name:값이 아니라 key여야해서,value:
+				objData[input.name] = input.value;
 			});
-			return formObj;
-		}
+			
+			console.log('3) objData', objData); //우리가 요구하는 이름으로서 나타날수있도록 변환한 작업
+			return objData;
+		};
 	</script>
 </body>
 </html>

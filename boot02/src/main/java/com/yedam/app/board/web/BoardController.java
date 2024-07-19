@@ -33,14 +33,14 @@ public class BoardController {
 	private BoardService boardService;
 	
 	//DI(필드주입말고 "생성자" 또는 getter,setter로 하기 - BoardServiceImpl참고해서 하기)
-	@Autowired //*잊지말자
+	@Autowired //*잊지말자-생성자가 2개이상일때는 @Autowired해줘야함 하나라서 필요없다고 노란색뜨는거
 	public BoardController(BoardService boardService) {
 		this.boardService = boardService;
 	}
 	
 	// 전체조회 : URI - boardList / RETURN - board/boardList
 	@GetMapping("boardList")
-	public String boardList(Model model) { //Model = Request + "Res"ponse
+	public String boardList(Model model) { //Model = "Req"uest + Response
 		List<BoardVO> list = boardService.boardList();
 		model.addAttribute("boards", list); //경로랑 다른거니까 주의!
 		return "board/boardList";
@@ -70,9 +70,18 @@ public class BoardController {
 //		return "board/boardInsert";
 //	}
 	
+	//교수님 방법 static(프로젝트 내부)
 	// 등록 - 처리 : URI - boardInsert / PARAMETER - BoardVO(QueryString)
 	//             RETURN - 단건조회 다시 호출
 	@PostMapping("boardInsert")
+	public String boardInsertProcess(BoardVO boardVO) {
+		int bno = boardService.insertBoard(boardVO);
+		return "redirect:boardInfo?boardNo=" + bno;
+	}
+	
+	// 등록 - 처리 : URI - boardInsert / PARAMETER - BoardVO(QueryString)
+	//             RETURN - 단건조회 다시 호출
+	//@PostMapping("boardInsert")
 	public String boardInsertProcess(BoardVO boardVO, @RequestPart MultipartFile[] images) {
 		//log.info(images[0].getOriginalFilename()); //파일 이름만 가져온거
 		for(MultipartFile image : images) {
@@ -99,7 +108,7 @@ public class BoardController {
 		int bno = boardService.insertBoard(boardVO);
 		return "redirect:boardInfo?boardNo=" + bno;
 	}
-	
+
 	// 수정 - 페이지 : URI - boardUpdate / PARAMETER - BoardVO(QueryString)
 	//               RETURN - board/boardUpdate
 	// => 단건조회
@@ -115,7 +124,7 @@ public class BoardController {
 	// => 등록(내부에서 수행하는 쿼리문 - UPDATE문)
 	@PostMapping("boardUpdate")
 	@ResponseBody
-	public Map<String, Object> boardUpdateProcess(@RequestBody BoardVO boardVO){
+	public Map<String, Object> boardUpdateProcess(@RequestBody BoardVO boardVO){ //@RequestBody면 html에서 JSON으로 보내는거 잊지망
 		return boardService.updateBoard(boardVO);
 	}
 	

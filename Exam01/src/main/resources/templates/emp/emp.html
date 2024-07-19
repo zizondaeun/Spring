@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<h3>사원정보</h3>
+	<ul>
+		<li>[[${emp.employeeId}]]</li>
+		<li>[[${emp.firstName}]]</li>
+		<li>[[${emp.lastName }]]</li>
+	</ul>
+</html>

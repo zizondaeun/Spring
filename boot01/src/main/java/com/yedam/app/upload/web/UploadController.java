@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.yedam.app.emp.service.EmpVO;
+import com.yedam.app.upload.service.UploadService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -132,6 +136,26 @@ public class UploadController {
 	
 	private String setImagePath(String uploadFileName) { // "/"를 \로 원상복구
 		return uploadFileName.replace(File.separator, "/");
+	}
+	
+	@Autowired
+	UploadService uploadService;
+	
+	@PostMapping("/infoAjax")
+	@ResponseBody
+	public List<String> insertInfo(EmpVO empVO, 
+								   //BoardVO boardVO,
+				@RequestPart MultipartFile[] uploadFiles) {
+	    
+		List<String> imageList = new ArrayList<>();
+		
+	    for(MultipartFile uploadFile : uploadFiles){
+	    	String savePath = uploadService.imageUpload(uploadFile);
+	    	//empVO.setImg(savePath);
+	    	//empService.insetEmpInfo(empVO);
+	    	imageList.add(setImagePath(savePath));
+	    };	
+	    return imageList;
 	}
 	
 }

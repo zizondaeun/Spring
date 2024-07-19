@@ -1,72 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="content">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	<h3>게시글 등록</h3>
-	<form name="insertForm" th:action="@{/boardInsert}" method="post" enctype="multipart/form-data">
-		<div>
-			<label>제목</label>
-			<input type="text" name="boardTitle">
-		</div>
-		<div>
-			<label>내용</label>
-			<textarea name="boardContent" cols="30" rows="5"></textarea>
-		</div>
-		<div>
-			<label>작성자</label>
-			<input type="text" name="boardWriter">
-		</div>
-		<div>
-			<label>작성일</label>
-			<input type="date" name="regdate">
-		</div>
-		<div>
-			<label>첨부이미지</label>
-			<input type="file" name="images" multiple>
-		</div>
-		<div>
-			<button type="submit">등록</button>
-		</div>
-	</form>
+	<div>
+		<h3>게시글 등록</h3>
+		<form name="insertForm" th:action="@{/boardInsert}" method="post" >
+			<table class="table">
+				<tr>
+					<th>제목</th>
+					<td><input type="text" name="boardTitle"></td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td><input type="text" name="boardWriter"></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td><textarea name="boardContent" cols="30" rows="5"></textarea></td>
+				</tr>
+				<tr>
+					<th>첨부이미지</th><!-- cat.jpg -->
+					<td><input type="text" name="image"></td>
+				</tr>
+				<tr>
+					<th>작성일자</th><!-- 'yyyy/MM/dd' -->
+					<td><input type="text" name="regdate" placeholder="yyyy-MM-dd"></td>
+				</tr>
+			</table>
+			<button type="submit" class="btn btn-primary">등록</button>
+		</form>
+	</div>
 	<script>
-		$('[name=insertForm]').on('submit', function(event){
-			event.preventDefault();
-			//console.log('제이쿼리');
+		$('form[name=insertForm]').on('submit', boardInsertHandler);
+		function boardInsertHandler(event){
+			event.preventDefault(); //해당 이벤트 일시정지
 			
 			let boardTitle = $('input[name="boardTitle"]')
 			if(boardTitle.val() == ''){
-				alert('제목은 필수입니다.')
+				alert('제목이 입력되지 않았습니다.');
 				boardTitle.focus();
 				return;
 			}
 			
-			let boardContent = $('input[name="boardContent"]')
-			if(boardContent.val() == ''){
-				alert('내용은 필수입니다.')
-				boardContent.focus();
-				return;
-			}
-			
 			let boardWriter = $('input[name="boardWriter"]')
-			if(boardContent.val() == ''){
-				alert('작성자는 필수입니다.')
+			if(boardWriter.val() == ''){
+				alert('작성자가 입력되지 않았습니다.')
 				boardWriter.focus();
 				return;
 			}
 			
-			let regdate = $('input[name="regdate"]')
-			if(regdate.val() == ''){
-				alert('작성일 선택은 필수입니다.')
-				regdate.focus();
-				return;
-			}
-			
+			alert('게시글이 등록되었습니다.');
 			insertForm.submit();
-		})
+		}
 	</script>
 </body>
 </html>
