@@ -27,14 +27,14 @@
 		WHERE book_no = #{bookNo}
 	</select>
 	
+	<!-- 마지막 도서번호 조회 +1 -->
+	<select id="selectBookNo">
+		SELECT NVL(MAX(book_no), 0) + 1
+		FROM book_tbl_06
+	</select>
+	
 	<!-- 등록 -->
 	<insert id="insertBookInfo" parameterType="BookVO">
-		<selectKey keyProperty="bookNo"
-			resultType="Integer"
-			order="BEFORE">
-			SELECT NVL(MAX(book_no), 0) + 1
-			FROM book_tbl_06
-		</selectKey>
 		INSERT INTO book_tbl_06(
 								    book_no,
 								    book_name,
@@ -76,8 +76,10 @@
 	
 	<!-- 대여조회 -->
 	<select id="selectRentAll" resultType="BookVO">
-		SELECT t.book_no, t.book_name, r.rent_price, r.rent_status
-		FROM 	book_tbl_06 t, rent_tbl_06 r
-		WHERE 	t.book_no = r.book_no
+		SELECT t.book_no, t.book_name, SUM(r.rent_price) as rent_price, COUNT(*) as rent_status
+		FROM 	book_tbl_06 t JOIN rent_tbl_06 r
+		ON 		t.book_no = r.book_no
+		GROUP BY 	t.book_no, t.book_name
+		HAVING 	SUM(r.rent_price) is not null
 	</select>
 </mapper>

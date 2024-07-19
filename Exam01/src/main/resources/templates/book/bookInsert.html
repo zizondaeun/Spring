@@ -10,12 +10,12 @@
 <body>
 	<div>
 		<h3>도서 등록</h3>
-		<form name="insertForm" th:action="@{/bookInsert}" method="post" >
+		<form name="insertForm" th:action="@{/bookInsert}" method="post">
 			<table class="table">
-<!-- 				<tr>
+ 				<tr>
 					<th>도서번호</th>
-					<td><input type="number" name="bookNo"></td>
-				</tr> -->
+					<td><input type="number" th:value="${lastNo}" name="bookNo" readonly></td>
+				</tr>
 				<tr>
 					<th>도서명</th>
 					<td><input type="text" name="bookName"></td>
@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<th>출판일자</th><!-- 'yyyy/MM/dd' -->
-					<td><input type="text" name="bookDate" placeholder="yyyy-MM-dd"></td>
+					<td><input type="date" name="bookDate"></td>
 				</tr>
 				<tr>
 					<th>금액</th>

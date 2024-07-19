@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.emp.mapper.EmpMapper">
+	<!-- 전체조회 -->
+	<select id="selectEmpAll" resultType="EmpVO">
+		SELECT empid
+		        , empname
+		        , mgr
+		        , sal
+		        , deptid
+		        , hiredate
+		FROM emp 
+		ORDER BY empid
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="selectEmpInfo" resultType="EmpVO" parameterType="EmpVO">
+		SELECT empid
+		        , empname
+		        , mgr
+		        , sal
+		        , deptid
+		        , hiredate
+		FROM emp
+		WHERE empid = #{empid}
+		<!-- ORDER BY ${keyword} -->
+		<!-- 
+			#{} : PreparedStatement => 데이터 타입에 따른 작업 /필드의 타입이 무엇인지에 따라 /@get,set을 불러옴
+			${} : Statement 		=> 데이터 타입을 무시하고 그대로 쿼리문의 값을 전달함 /검색 또는 정렬 등에 사용 /하나의 문자열로 인식 /컬럼이나 테이블을 변경할때 $사용
+		 -->
+	</select>
+	
+	<!-- 등록 - result는 거의 사용x, 어차피 int이기때문에 --><!-- keyProperty,result는 필드값 -->
+	<insert id="insertEmpInfo" parameterType="EmpVO">
+		<selectKey keyProperty="empid" 
+					resultType="Integer"
+					order="BEFORE">
+			SELECT NVL(MAX(empid), 0) + 1
+			FROM emp
+		</selectKey>
+		INSERT INTO emp
+			       (
+			        empid
+			        , empname
+			        , mgr
+			        , sal
+			        <if test="deptid > 0">
+			        , deptid
+			        </if>
+			        , hiredate
+			       )
+			VALUES
+				   (
+					<!-- emp_seq.NEXTVAL -->
+					#{empid}
+					, #{empname}
+					, #{mgr}
+					, #{sal}
+					<if test="deptid > 0">
+					, #{deptid}
+					</if>
+					<choose>
+						<when test="hiredate != null">
+							, #{hiredate}						
+						</when>
+						<otherwise>
+							, sysdate
+						</otherwise>
+					</choose>
+				   )
+	</insert>
+	
+	<!-- 수정 - 매개값이 두개면 파라미터를 생략하고 진행해도 됨 -->
+<!-- 	<update id="updateEmpInfo">
+		UPDATE emp
+		SET empname = #{emp.empname}
+				, sal = #{emp.sal}
+				, mgr = #{emp.mgr}
+				, deptid = #{emp.deptid}
+		WHERE empid = #{id}
+	</update> -->
+	
+	<update id="updateEmpInfo">
+		UPDATE emp
+		<set>
+			sal = #{emp.sal}
+			, mgr = #{emp.mgr}
+			, deptid = #{emp.deptid}
+			<if test="emp.empname != null and !emp.empname.equals('')">
+			, empname = #{emp.empname}
+			</if>
+		</set>
+		WHERE empid = #{id}
+	</update>
+	
+	<!-- 삭제 - 매개변수 이름은 상관없어서 empid이든 id이든 변수명은 상관없음-->
+	<delete id="deleteEmpInfo" parameterType="int">
+		DELETE FROM emp
+		WHERE empid = #{eid}
+	</delete>
+</mapper>

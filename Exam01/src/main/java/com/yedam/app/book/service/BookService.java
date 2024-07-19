@@ -13,6 +13,9 @@ public interface BookService {
 	//등록
 	public int insertBook(BookVO bookVO);
 	
+	//마지막 도서번호 조회 +1
+	public int lastBookNo();
+	
 	//수정
 	public Map<String, Object> updateBook(BookVO bookVO);
 	

@@ -37,15 +37,18 @@ public class BookController {
 		return "book/bookInfo";
 	}
 	
-	//등록
+	//등록 - 페이지(화면)
 	@GetMapping("bookInsert")
-	public String bookInsertForm() {
+	public String bookInsertForm(Model model) {
+		int lastNo = bookService.lastBookNo();
+		model.addAttribute("lastNo", lastNo);
 		return "book/bookInsert";
 	}
 	
+	//등록 - 처리(기능)
 	@PostMapping("bookInsert")
 	public String bookInsertProcess(BookVO bookVO) {
-		int bno = bookService.insertBook(bookVO);
+		bookService.insertBook(bookVO);
 		return "redirect:bookList";
 	}
 	

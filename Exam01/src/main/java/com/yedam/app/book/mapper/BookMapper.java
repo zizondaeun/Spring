@@ -14,6 +14,9 @@ public interface BookMapper {
 	//등록
 	public int insertBookInfo(BookVO bookVO);
 	
+	//마지막 도서번호 조회 +1이 들어가있음
+	public int selectBookNo(); 
+	
 	//수정
 	public int updateBookInfo(BookVO bookVO);
 	

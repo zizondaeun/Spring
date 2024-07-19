@@ -9,9 +9,9 @@
 </head>
 <body>
 	<h3>도서별 대여매출현황</h3>
-		<table class="table">
+	<table class="table table-striped table-bordered">
 		<thead>
-			<tr>
+			<tr style="text-align:center;">
 				<th>도서번호</th>
 				<th>도서명</th>
 				<th>대여총계</th>
@@ -21,10 +21,10 @@
 		<tbody>
 			<th:block th:each="rent : ${rents}">
 				<tr>
-					<td th:text="${rent.bookNo}"></td>
-					<td th:text="${rent.bookName}"></td>
-					<td th:text="${#numbers.formatInteger(rent.rentPrice, 3, 'COMMA')}"></td>
-					<td th:text="${rent.rentStatus}"></td>
+					<td th:text="${rent.bookNo}" style="text-align:center;"></td>
+					<td th:text="${rent.bookName}" style="text-align:left;"></td>
+					<td th:text="${#numbers.formatInteger(rent.rentPrice, 3, 'COMMA')}" style="text-align:right;"></td>
+					<td th:text="${rent.rentStatus}" style="text-align:right;"></td>
 				</tr>
 			</th:block>
 		</tbody>

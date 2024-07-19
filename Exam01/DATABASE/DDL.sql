@@ -62,9 +62,11 @@ INSERT INTO book_tbl_06(
 VALUES (104, 'HTML', '104.jpg', '18/04/04', 10000, 'ȫ�浿', 'HTML/CSS/JAVASCRIPT/JQUERY');
 SELECT * FROM book_tbl_06;
 
-SELECT t.book_no, t.book_name, r.rent_price
-FROM book_tbl_06 t,rent_tbl_06 r
-WHERE t.book_no = r.book_no;
+SELECT t.book_no, t.book_name, SUM(r.rent_price) as rent_price, COUNT(*) as rent_status
+FROM book_tbl_06 t JOIN rent_tbl_06 r
+ON t.book_no = r.book_no
+GROUP BY t.book_no, t.book_name
+HAVING SUM(r.rent_price) is not null;
 
 CREATE TABLE rent_tbl_06(
     rent_no number primary key,

@@ -62,5 +62,10 @@ public class BookServiceImpl implements BookService{
 	public List<BookVO> rentList() {
 		return bookMapper.selectRentAll();
 	}
+
+	@Override
+	public int lastBookNo() {
+		return bookMapper.selectBookNo(); 
+	}
 	
 }

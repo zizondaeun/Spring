@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+	<h3>사원 정보 수정</h3>
+	<form name="updateForm" th:object="${empInfo}">
+		<div>
+			<label>사원번호</label>
+			<input type="text" th:field="*{empid}" readonly>
+		</div>
+		<div>
+			<label>이름</label>
+			<input type="text" th:field="*{empname}">
+		</div>
+		<div>
+			<label>상사번호</label>
+			<input type="number" th:field="*{mgr}">
+		</div>
+		<div>
+			<label>급여</label>
+			<input type="number" th:value="${empInfo.sal}">
+		</div>
+		<div>
+			<label>부서번호</label>
+			<input type="number" th:field="*{deptid}">
+		</div>
+		<div>
+			<label>입사일자</label>
+			<input type="date" th:field="*{hiredate}">
+		</div>
+		<div>
+			<button type="button" id="updateBtn">저장</button>
+		</div>
+	</form>
+	<script>
+		//$('form[name="updateForm"] button').on('click', updateAjax);
+		$('#updateBtn').on('click', updateAjax);
+		
+		function updateAjax(event){
+			//1)유효성 체크
+			if(validationCheck() == false) return;
+			
+			//2)서버에 보낼 데이터 정리
+			let dataObj = getEmpObj(); //리턴된 값이 객체로 바껴서 넘어옴
+			console.log(dataObj, '1.객체로 넘어옴');
+			//{ empid : 209, empname : 'Hong', ... }
+			
+			//3)AJAX('경로', {}) /.done(=.then())/ .fail(=.catch()) => @ResponseBody
+			$.ajax('empUpdate', { 
+				type : 'post', //통신할때 method : get, post, put, delete
+				//=> 커맨드 객체, @RequestParam
+				//data : dataObj //기본 객체타입만 받아, 자동으로 QueryString 변환 /이거는 수정 처리 첫번째
+				//=> @RequestBody
+				contentType : 'application/json', //이거는 수정 처리 두번째
+				data : JSON.stringify(dataObj)
+			})
+			.done(result => { //.done()이 알아서 다 바꿔줘
+				console.log(result);
+			})
+			.fail(err => console.log(err));
+		}
+		
+		function validationCheck(){
+			let ename = $('[name="empname"]'); //등록에서처럼 input있어도 돼 
+			if(ename.val() == ''){
+				alert('이름은 필수 값입니다.');
+				ename.focus();
+				return false; //리턴하면서 값을 돌려줘야함(false) 그다음에 핸들러를 위에서 종료(return)
+			}
+			
+			let sal = $('[name="sal"]');
+			if(sal.val() < 1000 || sal.val() > 99999){
+				alert('급여의 범위는 1,000 ~ 99,999 입니다.');
+				sal.focus();
+				return false;
+			}
+			
+			return true; //정상적으로 진행된 경우는 if를 돌지않고 바로 return true겠지
+		}
+		
+		function getEmpObj(){ 
+			let formAry = $('form[name="updateForm"]').serializeArray();
+			//[ { name : 'empid', value : '209' }, 
+			//	{ name : 'empname', value : 'Hong' }, ... ]
+			// => javascript에선 FormData
+			console.log(formAry, '2.배열로 넘어옴');
+
+			let formObj = {};
+			$.each(formAry, function(idx, input){ //??독립된 메소드.each /forEach
+				//지금 input = { name : 'empid', value : '209' } 이러한데
+				//우리는 이 형태이길 원해서{ empid : 209, empname : 'Hong', ... }
+				formObj[input.name] = input.value; //내가 원하는 객체 형식으로 바꿔줌
+				//formObj['empid'] = '209';
+			});
+			//{ empid : 209, empname : 'Hong', ... }
+			return formObj;
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h3>도서 조회/수정</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>도서번호</th>
+				<th>도서명</th>
+				<th>도서표지</th>
+				<th>출판일자</th>
+				<th>금액</th>
+				<th>출판사</th>
+				<th>도서소개</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:each="book : ${books}"><!-- "board, status(상태값이 올수있음) : ${boards}" -->
+				<!-- 실제 반복하고자 하는 태그 -->
+				<!-- board=BoardVO => <tr/> -->
+				<tr th:onclick="|location.href='@{/bookInfo(bookNo=${book.bookNo})}'|">
+				<!-- <tr th:name="${status.index(0부터 시작) or status.count(1부터 시작) or stutus.first(true,false첫번째값인지아닌지)}"> -->
+					<td th:text="${book.bookNo}"></td>
+					<td th:text="${book.bookName}"></td>
+					<td>
+						<img th:src="@{/images/{fileName}(fileName=${book.bookCoverImg})}" class="img-fluid" style="width:10%;">
+					</td>
+					<td th:text="${#dates.format(book.bookDate, 'yyyy/MM/dd')}"></td>
+					<td th:text="${#numbers.formatInteger(book.bookPrice, 3, 'COMMA')}"></td>
+					<td th:text="${book.bookPublisher}"></td>
+					<td th:text="${book.bookInfo}"></td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+</body>
+</html>
