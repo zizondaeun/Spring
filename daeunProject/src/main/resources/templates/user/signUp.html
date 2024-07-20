@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div>
+		<h3>회원가입</h3>
+		<form name="insertForm" th:action="@{/sign-up}" method="post">
+			<table class="table">
+ 				<tr>
+					<th>아이디</th>
+					<td>
+						<input type="text" name="userName" id="userName">
+						<button type="button" id="idCkeck">중복 확인</button>
+					</td>
+				</tr>
+				<tr>
+					<th>비밀번호</th>
+					<td><input type="password" name="password" id="password"></td>
+				</tr>
+				<tr>
+					<th>비밀번호 확인</th><!-- cat.jpg -->
+					<td><input type="password" id="checkPassword"></td>
+				</tr>
+				<tr>
+					<th>닉네임</th>
+					<td><input type="text" name="nickname" id="nickname"></td>
+				</tr>
+			</table>
+			<button type="submit" class="btn btn-primary" id="regBtn">등록</button>
+		</form>
+	</div>
+	<script>
+		let idcheck = false;
+		$('#idCkeck').on('click', function(event){
+			let id = $('#userName').val();
+			$.ajax('checkId', {
+				type : 'get',
+				data : {
+					userName : id
+				}
+			})
+			.done(result => {
+				console.log(result);
+				if(result){
+					alert('사용가능한 아이디입니다.');
+					idcheck = true;
+				}else{
+					alert('이미 있는 아이디입니다.');
+				}
+			})
+			.fail(err => console.log(err));
+		})
+		$('#userName').on('input',function(){
+			idcheck = false;
+		})
+		$('#regBtn').on('click',function(e){
+			e.preventDefault();
+			
+			let pw = $('#password').val();
+			let pwcheck = $('#checkPassword').val();
+			let nickname = $('#nickname').val();
+			
+			if(!idcheck){
+				alert('id 중복확인 후 이용가능합니다.');
+				return;
+			}
+			if(pw != pwcheck){
+				alert('비밀번호를 확인해주세요.');
+				return;
+			}
+			if(pw == ''){
+				alert('비밀번호를 입력해주세요');
+				return;
+			}
+			if(pwcheck == ''){
+				alert('비밀번호체크를 해주세요.');
+				return;
+			}
+			if(nickname == ''){
+				alert('닉네임을 입력해주세요.');
+				return;
+			}
+			$('form[name=insertForm]').submit();
+		})
+	</script>
+</body>
+</html>

@@ -23,14 +23,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedam.app.board.service.BoardService;
 import com.yedam.app.board.service.BoardVO;
 
+import lombok.RequiredArgsConstructor;
+
 //@AllArgsConstructor //매개변수로 생성자 받는 방식(DI 어려우면 이 방법으로 하기)
 @Controller
+//@RequiredArgsConstructor
 public class BoardController {
 	
 	@Value("${file.upload.path}")
 	private String uploadPath;
 	
-	private BoardService boardService;
+	private final BoardService boardService;
 	
 	//DI(필드주입말고 "생성자" 또는 getter,setter로 하기 - BoardServiceImpl참고해서 하기)
 	@Autowired //*잊지말자-생성자가 2개이상일때는 @Autowired해줘야함 하나라서 필요없다고 노란색뜨는거

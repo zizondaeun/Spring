@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dada.app.user.mapper.UserMapper">
+	<!-- 회원전체조회 -->
+	<select id="selectUserAll" resultType="UserVO">
+		SELECT user_no
+			    , user_name
+			    , password
+			    , nickname
+		FROM users
+		ORDER BY user_no
+	</select>
+	
+	<!-- 회원단건조회 -->
+	<select id="selectUserInfo" resultType="UserVO" parameterType="int">
+		SELECT user_no
+			    , user_name
+			    , password
+			    , nickname
+		FROM users
+		WHERE user_no = #{userNo}
+	</select>
+	
+	<!-- 아이디중복체크 -->
+	<select id="selectUserName" resultType="String" parameterType="String">
+		SELECT user_name
+		FROM users
+		WHERE user_name = #{userName}
+	</select>
+	
+	<!-- 회원등록 -->
+	<insert id="insertUserInfo" parameterType="UserVO">
+		<selectKey keyProperty="userNo"
+			resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(user_no), 0) + 1
+			FROM users
+		</selectKey>
+		INSERT INTO users(
+							user_no
+							, user_name
+							, password
+							, nickname
+						)
+				VALUES	(
+							#{userNo}
+							, #{userName}
+							, #{password}
+							, #{nickname}
+						)
+	</insert>
+	
+	<!-- 회원수정 -->
+	<update id="updateUserInfo" parameterType="UserVO">
+		UPDATE users
+		SET user_name = #{userName}
+			, password = #{password}
+			, nickname = #{nickname}
+	</update>
+	
+	<delete id="deleteUserInfo" parameterType="int">
+		DELETE FROM users
+		WHERE user_no = #{userNo}
+	</delete>
+	
+</mapper>
