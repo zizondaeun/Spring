@@ -50,7 +50,7 @@ public class UserController {
 		int userNo = userService.userInsert(userVO);
 		return "user/login";
 	}
-	
+	   
 	//회원수정 - 페이지
 	
 	//수정 - 기능
