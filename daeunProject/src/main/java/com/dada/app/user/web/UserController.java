@@ -52,7 +52,7 @@ public class UserController {
 	}
 	   
 	//회원수정 - 페이지
-	
+	//잘못된건지 아닌지 확인하기용
 	//수정 - 기능
 	
 	//회원삭제
