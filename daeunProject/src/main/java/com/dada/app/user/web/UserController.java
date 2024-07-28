@@ -50,7 +50,13 @@ public class UserController {
 		int userNo = userService.userInsert(userVO);
 		return "user/login";
 	}
-	   
+	
+	//로그인 - 페이지
+	@GetMapping("login")
+	public String userlogin() {
+		return "user/login";
+	}
+	
 	//회원수정 - 페이지
 	//잘못된건지 아닌지 확인하기용
 	//수정 - 기능
