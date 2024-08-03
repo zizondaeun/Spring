@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dada.app.user.mapper.UserMapper;
+import com.dada.app.user.service.CalendarVO;
 import com.dada.app.user.service.UserService;
 import com.dada.app.user.service.UserVO;
 
@@ -60,6 +61,9 @@ public class UserServiceImpl implements UserService{
 		return false;
 	}
 
-
+	@Override
+	public List<CalendarVO> dayList() {
+		return userMapper.selectDayAll();
+	}
 
 }

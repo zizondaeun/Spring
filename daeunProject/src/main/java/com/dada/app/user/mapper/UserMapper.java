@@ -2,6 +2,7 @@ package com.dada.app.user.mapper;
 
 import java.util.List;
 
+import com.dada.app.user.service.CalendarVO;
 import com.dada.app.user.service.UserVO;
 
 public interface UserMapper {
@@ -22,5 +23,7 @@ public interface UserMapper {
 	
 	//회원삭제
 	public int deleteUserInfo(int userNo);
+	
+	public List<CalendarVO> selectDayAll();
 	
 }

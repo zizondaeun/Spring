@@ -63,4 +63,15 @@
 		WHERE user_no = #{userNo}
 	</delete>
 	
+	<select id="selectDayAll" resultType="CalendarVO">
+		SELECT id
+				, title
+				, startDay
+				, endDay
+				, allDay
+				, textColor
+				, backgroundColor
+				, borderColor
+		FROM calendar
+	</select>
 </mapper>

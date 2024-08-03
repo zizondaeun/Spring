@@ -20,4 +20,6 @@ public interface UserService {
 	
 	//회원삭제
 	public int userDelete(int userNo);
+	
+	public List<CalendarVO> dayList();
 }

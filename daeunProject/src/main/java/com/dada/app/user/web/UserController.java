@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.dada.app.user.service.CalendarVO;
 import com.dada.app.user.service.UserService;
 import com.dada.app.user.service.UserVO;
 
@@ -62,5 +63,9 @@ public class UserController {
 	//수정 - 기능
 	
 	//회원삭제
-	
+	@GetMapping("cal")
+	public String calendar() {
+		return "challenge/calendar";
+	}
+
 }
