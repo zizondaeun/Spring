@@ -76,7 +76,7 @@ public class BoardController {
 	//교수님 방법 static(프로젝트 내부)
 	// 등록 - 처리 : URI - boardInsert / PARAMETER - BoardVO(QueryString)
 	//             RETURN - 단건조회 다시 호출
-	@PostMapping("boardInsert")
+	//@PostMapping("boardInsert")
 	public String boardInsertProcess(BoardVO boardVO) {
 		int bno = boardService.insertBoard(boardVO);
 		return "redirect:boardInfo?boardNo=" + bno;
@@ -84,7 +84,7 @@ public class BoardController {
 	
 	// 등록 - 처리 : URI - boardInsert / PARAMETER - BoardVO(QueryString)
 	//             RETURN - 단건조회 다시 호출
-	//@PostMapping("boardInsert")
+	@PostMapping("boardInsert")
 	public String boardInsertProcess(BoardVO boardVO, @RequestPart MultipartFile[] images) {
 		//log.info(images[0].getOriginalFilename()); //파일 이름만 가져온거
 		for(MultipartFile image : images) {
